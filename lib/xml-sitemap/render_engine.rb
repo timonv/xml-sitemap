@@ -15,6 +15,10 @@ module XmlSitemap
             s.url do |u|
               u.loc        item.target
 
+              for l in item.languages
+                u["xhtml"].link rel: 'alternate', hreflang: l[:language_code], href: l[:url]
+              end
+
               # Format and image tag specifications found at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
               if item.image_location
                 u["image"].image do |a|
@@ -71,6 +75,10 @@ module XmlSitemap
         @items.each do |item|
           s.url do |u|
             u.loc        item.target
+
+            for l in item.languages
+              u.tag! "xhtml:link", rel: 'alternate', hreflang: l[:language_code], href: l[:url]
+            end
 
             # Format and image tag specifications found at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
             if item.image_location
@@ -131,6 +139,9 @@ module XmlSitemap
       @items.each do |item|
         item_string  = "  <url>\n"
         item_string << "    <loc>#{CGI::escapeHTML(item.target)}</loc>\n"
+        for l in item.languages
+          item_string << %Q!    <xhtml:link rel="alternate" hreflang="#{l[:language_code]}" href="#{l[:url]}" />\n!
+        end
 
         # Format and image tag specifications found at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
         if item.image_location
