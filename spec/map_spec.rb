@@ -6,6 +6,10 @@ describe XmlSitemap::Map do
   let(:extra_time) { Time.gm(2011, 7, 1, 0, 0, 1) }
 
   describe '#new' do
+    it 'should include w3 xmlns' do
+      expect(XmlSitemap::Map.new('foobar.com').render).to include('xmlns:xhtml="http://www.w3.org/1999/xhtml"')
+    end
+
     it 'should not allow empty domains' do
       expect { XmlSitemap::Map.new(nil) }.to raise_error ArgumentError
       expect { XmlSitemap::Map.new('') }.to raise_error ArgumentError
